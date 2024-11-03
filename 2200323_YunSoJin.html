@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+
+  <style>
+    @font-face {
+      font-family: 'Cafe24Ssurround';
+      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24Ssurround.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    body {
+      margin: 0; 
+      padding: 0;
+      background-color: white;
+      background-size: 100%;
+    } 
+
+    .header {
+      width: auto;
+      height: 85px;
+      background-color: #0066ff;
+      padding: 10px;
+      padding-left: 60px;
+    }
+
+    .con {
+      width: 1000px;
+      height: auto; 
+      padding: 0px;
+      margin: 0 auto;
+      background: white;
+      position: relative;
+    }
+
+    .search-box {
+      height: 30px;
+      width: 300px;
+      background: #dbdbdb;
+      border-radius: 40px;
+      padding: 10px;
+      margin: 20px;
+      border: 1px solid #f9deec;
+      float: right;
+    }
+
+    .search-txt {
+      border: none;
+      background: none;
+      outline: none;
+      float: left;
+      padding: 0px;
+      color: #797979;
+      font-size: 16px;
+      line-height: 30px;
+      width: 200px;
+    }
+
+    .search-btn {
+      color: #dbdbdb;
+      float: right;
+      width: 40px;
+      height: 100%;
+      background-color: aliceblue;
+      border-radius: 50%;
+      border: none;
+      font-size: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .title {
+      width: 250px;
+      height: 80px;
+      background-color: none;
+      float: left;
+    }
+
+    .listbox {
+      width: 330px;
+      height: 600px;
+      background-color: #dbdbdb;
+      float: left;
+      position: relative;
+    }
+    
+    /* 비급여항목 버튼 */
+    .list {
+      width: 230px;
+      height: 50px;
+      border-radius: 10px;
+      position: relative;
+      margin-left: 35px;
+      transform: translateY(-50%);
+      left: 20px;
+      bottom: 48%;
+    }
+
+    .list_txt {
+      position: relative;
+      left: 40px;
+      top: 60px;
+      font-size: 25px;
+    }
+
+    .imgbox {
+      background: none;
+      float: right;
+      position: relative;
+    }
+
+    .img {
+      opacity: 0.6;
+    }
+
+    .img_txt {
+      position: relative;
+      left: 130px;
+      bottom: 400px;
+      color: #252525;
+      font-size: 40px;
+      font-weight: bold;
+      opacity: 1;
+    }
+
+    .img_txt2 {
+      position: relative;
+      left: 150px;
+      bottom: 420px;
+      font-size: 20px;
+      color: #252525;
+      text-decoration: underline;
+    }
+
+    .hidden { 
+        display: none; 
+    }
+    .favorite {
+         color: orange; cursor: pointer;
+         }
+    .unfavorite { 
+        color: lightgray; cursor: pointer; 
+    }
+    .star { 
+        font-size: 1.5em; margin-left: auto; 
+    }
+
+    .list_group { 
+        display: flex; 
+        flex-direction: column; 
+        padding-left: 0; 
+        margin-bottom: 0;
+        background-color: #f9deec;
+      }
+
+    .list_group_item { 
+        position: relative; 
+        display: flex; 
+        align-items: center; 
+        padding: 0.5rem 1rem; 
+        margin-bottom: -1px; 
+        background-color: #fff; 
+        border: 1px solid lightgray; 
+        color: #252525;
+        cursor: pointer;
+       }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left:120px;
+        top:180px;
+        width: 100%;
+        height: 100%;
+       color: #252525;
+        padding-top: 60px;
+    }
+
+    .modal_content {
+        background-color: #fefefe;
+        margin: 5% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        width:600px;
+    }
+
+    /* 모달 닫기 버튼 */
+    .close {
+        color: gray;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .click {
+      background-color:gainsboro;
+    }
+
+    .list_news_box {
+      width:280px;
+      height: 390px;
+      position: relative;
+      color: #252525;
+      background-color: white;
+      top:70px;
+      border-radius: 10%;
+      padding-top:10px;
+      right: 10px;
+    }
+
+
+    .hospital_info {
+      margin-top: 20px;
+      background-color: white;
+      color: black;
+      padding: 20px;
+      border-radius: 10px;
+      position: absolute;
+      z-index: 999;
+      left: 330px;
+      top: 85px;
+      max-height: 400px;
+      overflow-y: auto;
+      display: none;
+}
+
+
+.hospital_item {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+    }
+
+  .hospital_detail {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: #252525;
+    }
+
+
+
+  </style>
+</head>
+<body>
+  <div class="con">
+    <div class="header">
+      <div class="title"><font color="white"><h1 style="font-family: Cafe24Ssurround">꼼꼼비급여<img src="plus.svg" alt="plus svg" width="60" height="40"></h1></div>
+        <form class="search-box" id="searchForm" action="" method="get">
+          <input class="search-txt" id="searchInput" type="text" name="keyword" placeholder="병원 이름을 입력하세요">
+          <button class="search-btn" type="submit">
+            <i class="fa-solid fa-magnifying-glass" style="color:#0066ff"></i>
+          </button>
+      </form>
+      <div class="hospital_info" id="hospitalInfo"></div>
+    </div>
+    <div class="listbox">
+      <div class="list_txt"><font color="#262626"><b>한 눈에 보는 목록!</font></b>
+        <i class="fa-solid fa-list-check fa-xl" style="color:#0066ff"></i>
+        <div class = "list_news_box">
+          <p style="text-align: center;">비급여 뉴스 모음</p>
+          <ul>
+            <li><p style="font-size:14px;"><a href = "https://www.nocutnews.co.kr/news/6156510?utm_source=naver&utm_medium=article&utm_campaign=20240606120011">7월부터 비급여 보험금 100만원 이상 받으면 보험료 할증</a></p></li>
+            <hr>
+            <li><p style="font-size:14px;"><a href="https://www.k-health.com/news/articleView.html?idxno=72326">비급여보고제도 의무화, 과잉진료 막을까</a></p></li>
+            <hr>
+            <li><p style="font-size:14px;"><a href="https://m.etoday.co.kr/view.php?idxno=2363305">‘한 달 4000만원’ 비급여 약제비에 좌절하는 유방암 말기 환자들</a></p></li>
+            <hr>
+            <li><p style="font-size:14px;"><a href="https://www.newsian.co.kr/news/articleView.html?idxno=70084">"비급여 항목 확인하세요"...진료액 따라 실손 보험료 오를 수 있어 </a></p></li>
+          </ul>
+        </div>
+      </div>
+      <div class="list">
+        <button type="button" name="item" class="btn btn-primary">비급여항목</button>
+        <div id="pocket" class="hidden"></div>      
+      </div>
+    </div>
+    <div id="itemModal" class="modal">
+      <div class="modal_content">
+          <span class="close">&times;</span>
+          <div id="itemExplain"></div>
+      </div>
+  </div>
+    <div class="imgbox">
+      <div class="img">
+        <img src="family.jpg" alt="가족사진" width="670px" height="600px">
+      </div>
+      <div class="img_txt">
+        <p>여러분들을 응원합니다!</p>
+      </div>
+      <div class="img_txt2">
+        <p>모든 정보들을 한 번에 그리고 편리하게</p>
+      </div>
+    </div>
+  </div>
+  <script src="https://kit.fontawesome.com/c6fe725f1a.js" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      let favorites = new Set();
+
+      // 아이템을 클릭 시 모달 창으로 설명
+    $(document).on('click', '.list_group_item', function() {
+      let explanation = $(this).data('explanation');
+      $('#itemExplain').html(explanation); // 설명을 보여주는 요소에 HTML 설정
+      $('#itemModal').css('display', 'block');
+      $('.list_group_item').removeClass('click');
+        $(this).addClass('click');
+    });
+
+    // 모달 닫기
+    $('.close').on('click', function() {
+      $('#itemModal').css('display', 'none');
+    });
+
+
+      $('.btn-primary').on('click', function() {
+        if ($('#pocket').is(':visible')) {
+          $('#pocket').toggle();
+        } else {
+          $.ajax({
+            type: "GET",
+            url: "https://apis.data.go.kr/B551182/nonPaymentDamtInfoService/getNonPaymentItemCodeList?pageNo=1&numOfRows=10&ServiceKey=o1vXDwnAkl%2Buj0SACTxrx9mhRkpKOckNDSF93HKL8QVdjszdcnCvxE8mO1gD1pX2w6zACCN9%2BJjJNCIbpLc4FA%3D%3D",
+            data: { ServiceKey: 'o1vXDwnAkl%2Buj0SACTxrx9mhRkpKOckNDSF93HKL8QVdjszdcnCvxE8mO1gD1pX2w6zACCN9%2BJjJNCIbpLc4FA%3D%3D' },
+            success: function(response) {
+              const items = $(response).find('item');
+              let rs = [];
+              $.each(items, function() {
+                let divCd2Nm = $(this).find('divCd2Nm').text();
+                let divCd1Dsc = $(this).find('divCd1Dsc').text();
+                //Set객체에 주어진 요소가 존재하는 여부를 판별
+                let hasFavorite = favorites.has(divCd2Nm);
+                let favoriteClass;
+                if(hasFavorite) {
+                    favoriteClass = 'favorite';
+                } else {
+                    favoriteClass = 'unfavorite';
+                }
+                rs.push(`<li class="list_group_item" data-explanation="${divCd1Dsc}">${divCd2Nm}<span class="star ${favoriteClass}" data-item="${divCd2Nm}"><i class="far fa-star"></i></span></li>`);
+              });
+              rs.splice(6,2);
+              $('#pocket').html(`<ul class="list_group">${rs.join("")}</ul>`);
+              $('#pocket').toggle();
+            },  
+          });       
+        }
+      });
+   
+
+      $('#pocket').on('click', '.star', function() {
+        let item = $(this).data('item');
+        if (favorites.has(item)) {
+          favorites.delete(item); 
+          $(this).removeClass('favorite').addClass('unfavorite').html('<i class="far fa-star"></i>');
+        } else {
+          favorites.add(item);
+          $(this).removeClass('unfavorite').addClass('favorite').html('<i class="fas fa-star"></i>');
+        }
+      });
+
+        $(document).on('click', function(event) {
+           if ($(event.target).closest('.hospital_info').length === 0) {
+             $('#hospitalInfo').hide();
+           }
+         });
+     });
+
+    $(document).ready(function() {
+            function loadHospitals(keyword) {
+                $.ajax({
+                    type: "GET",
+                    url: "https://apis.data.go.kr/B551182/nonPaymentDamtInfoService/getNonPaymentItemHospList?pageNo=1&numOfRows=10&itemCd=A1100&clCd=01&sidoCd=110000&sgguCd=110007&yadmNm=%EA%B2%BD%ED%9D%AC%EB%8C%80%ED%95%99%EA%B5%90%EB%B3%91%EC%9B%90&searchWrd=%EC%9D%B8%EC%8B%A4&ServiceKey=o1vXDwnAkl%2Buj0SACTxrx9mhRkpKOckNDSF93HKL8QVdjszdcnCvxE8mO1gD1pX2w6zACCN9%2BJjJNCIbpLc4FA%3D%3D",
+                    dataType: "xml",
+                    data: {
+                        yadmNm: keyword,
+                        ServiceKey: 'o1vXDwnAkl%2Buj0SACTxrx9mhRkpKOckNDSF93HKL8QVdjszdcnCvxE8mO1gD1pX2w6zACCN9%2BJjJNCIbpLc4FA%3D%3D',
+                    },
+                    success: function(response) {
+                        let hospitals = [];
+                        $(response).find('item').each(function() {
+                            let hospital = {
+                                yadmNm: $(this).find('yadmNm').text(),
+                                itmCdNm: $(this).find('itmCdNm').text(),
+                                itmPrcMax: $(this).find('itmPrcMax').text(),
+                                itmPrcMin: $(this).find('itmPrcMin').text(),
+                                prcMax: $(this).find('prcMax').text(),
+                                prcMin: $(this).find('prcMin').text()
+                            };
+                            hospitals.push(hospital);
+                        });
+
+                        displayHospitals(hospitals); //병원정보 화면 출력
+                        $('#hospitalInfo').show();
+                    },
+                });
+            }
+
+            function loadHospitalDetails(keyword) {
+                $.ajax({
+                    type: "GET",
+                    url: "https://apis.data.go.kr/B551182/nonPaymentDamtInfoService/getNonPaymentItemHospDtlList?pageNo=1&numOfRows=10&clCd=01&sidoCd=110000&sgguCd=110008&yadmNm=%EC%A4%91%EC%95%99%EB%8C%80%ED%95%99%EA%B5%90%EB%B3%91%EC%9B%90&ServiceKey=o1vXDwnAkl%2Buj0SACTxrx9mhRkpKOckNDSF93HKL8QVdjszdcnCvxE8mO1gD1pX2w6zACCN9%2BJjJNCIbpLc4FA%3D%3D",
+                    dataType: "xml",
+                    data: {
+                        yadmNm: keyword,
+                        ServiceKey: 'o1vXDwnAkl%2Buj0SACTxrx9mhRkpKOckNDSF93HKL8QVdjszdcnCvxE8mO1gD1pX2w6zACCN9%2BJjJNCIbpLc4FA%3D%3D',
+                    },
+                    success: function(response) {
+                        let hospitalDetails = [];
+                        $(response).find('item').each(function() {
+                            let npayKorNm = $(this).find('npayKorNm').text();
+                            let curAmt = $(this).find('curAmt').text();
+                            hospitalDetails.push({ npayKorNm: npayKorNm, curAmt: curAmt });
+                        });
+                         displayHospitalDetails(hospitalDetails);
+                        $('#hospitalInfo').show();
+                    },
+                });
+            }
+
+            function loadHospitallast(keyword) {
+                $.ajax({
+                    type: "GET",
+                    url: "https://apis.data.go.kr/B551182/nonPaymentDamtInfoService/getNonPaymentItemHospDtlList?pageNo=1&numOfRows=20&clcd=11&sidoCd=110000&sgguCd=110013&ServiceKey=o1vXDwnAkl%2Buj0SACTxrx9mhRkpKOckNDSF93HKL8QVdjszdcnCvxE8mO1gD1pX2w6zACCN9%2BJjJNCIbpLc4FA%3D%3D",
+                    dataType: "xml",
+                    data: {
+                        yadmNm: keyword,
+                        ServiceKey: 'o1vXDwnAkl%2Buj0SACTxrx9mhRkpKOckNDSF93HKL8QVdjszdcnCvxE8mO1gD1pX2w6zACCN9%2BJjJNCIbpLc4FA%3D%3D'
+                },
+                success: function(response) {
+                    let hospitallast = [];
+                    $(response).find('item').each(function() {
+                        let yadmNpayCdNm = $(this).find('yadmNpayCdNm').text();
+                        let curAmt = $(this).find('curAmt').text();
+                        hospitallast.push({ yadmNpayCdNm:yadmNpayCdNm, curAmt: curAmt });
+                    });
+                    displayHospitallast(hospitallast);
+                    $('#hospitalInfo').show();
+                },
+            });
+        }
+
+            function displayHospitals(hospitals) {
+                let hospitalInfoHTML = hospitals.map(hospital => `
+                        <div class="hospital_item">
+                            <h3>${hospital.yadmNm}</h3>
+                            <p><strong>진료명:</strong> ${hospital.itmCdNm}</p>
+                            <p><strong>가격 최대:</strong> ${hospital.itmPrcMax}</p>
+                            <p><strong>가격 최소:</strong> ${hospital.itmPrcMin}</p>
+                        </div>
+                    `).join('');
+                $('#hospitalInfo').html(hospitalInfoHTML);
+            }
+
+            function displayHospitalDetails(hospitalDetails) {
+                let hospitalDetailsHTML = hospitalDetails.map(detail => `
+                        <div class="hospital_detail">
+                            <p><strong>항목명:</strong> ${detail.npayKorNm}</p>
+                            <p><strong>가격:</strong> ${detail.curAmt}</p>
+                        </div>
+                    `).join('');
+                $('#hospitalInfo').html(hospitalDetailsHTML);
+            }
+
+            function displayHospitallast(hospitallast) {
+                let hospitalDetailsHTML = hospitallast.map(detail => `
+                        <div class="hospital_detail">
+                            <p><strong>항목명:</strong> ${detail.yadmNpayCdNm}</p>
+                            <p><strong>가격:</strong> ${detail.curAmt}</p>
+                        </div>
+                      `).join('');
+                  $('#hospitalInfo').html(hospitalDetailsHTML);
+              }             
+
+            $('#searchForm').on('submit', function(event) {
+                event.preventDefault(); // 폼 서버 제출 방지
+                let keyword = $('#searchInput').val();
+                //console.log(keyword);
+                if (keyword) {
+                    if (keyword === '경희대학교병원') {
+                        loadHospitals(keyword);
+                    }
+                    else if (keyword === '중앙대학교병원') {
+                         loadHospitalDetails(keyword);
+                     }
+                     else if (keyword === '서울은빛요양병원') {
+                        loadHospitallast(keyword);
+                    }
+                }
+            });
+        });
+    
+  </script>
+</body>
+</html>
